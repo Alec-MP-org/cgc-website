@@ -1,0 +1,81 @@
+{% extends "base_template.html" %}
+{% load crispy_forms_tags %}
+{% block rostersearchactive %} active {% endblock %}
+{% block extrahead %}{{ form.media }}{% endblock %}
+{% block content %}
+	<form action="" method="get" id="searchform>
+		{% csrf_token %}
+		<div class="row">
+			<div class="col">
+				{{ form.start_date|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.end_date|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.search_duty_instructor|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.search_instructor|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.search_aei|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.search_duty_pilot|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.search_tug|as_crispy_field }}
+			</div>
+			<div class="col">
+				<div id="vertbtncontainer">
+					<input id="formsubmitbtn" type="submit" class="btn btn-secondary" value="Search">
+				</div>
+			</div>
+		</div>
+		<p> {{ resultcount }} matches, displaying {{ form.resultsperpage }} results per page </p>
+	</form>
+	<table class="table table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Date</th>
+				<th scope="col">Duty Instructor</th>
+				<th scope="col">Instructor</th>
+				<th scope="col">AEI</th>
+				<th scope="col">Duty Pilot</th>
+				<th scope="col">Tug Pilot</th>
+				<th scope="col">Runway</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for day in flightsheetheaders %}
+				<tr>
+					<td>{{ day.flight_date }}</td>
+					<td>{{ day.duty_instructor }}</td>
+					<td>{{ day.instructor }}</td>
+					<td>{{ day.air_experience_instructor }}</td>
+					<td>{{ day.duty_pilot }}</td>
+					<td>{{ day.tug_pilot1 }}</td>
+					<td>{{ day.runway }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="pagination">
+    		<span class="step-links">
+        		{% if flightsheetheaders.has_previous%}
+            			<a href="?page=1{% if form.start_date.value %}&start_date={{ form.start_date.value }}{% endif %}{% if form.end_date.value %}&end_date={{ form.end_date.value }}{% endif %}{% if form.search_duty_instructor.value %}&search_duty_instructor={{ form.search_duty_instructor.value }}{% endif %}{% if form.search_instructor.value %}&search_instructor={{ form.search_instructor.value }}{% endif %}{% if form.search_aei.value %}&search_aei={{ form.search_aei.value }}{% endif %}{% if form.search_duty_pilot.value %}&search_duty_pilot={{ form.search_duty_pilot.value }}{% endif %}{% if form.search_tug.value %}&search_tug={{ form.search_tug.value }}{% endif %}&resultsperpage={{ form.resultsperpage.value }}">&laquo; first</a>
+            			<a href="?page={{ flightsheetheaders.previous_page_number }}{% if form.start_date.value %}&start_date={{ form.start_date.value }}{% endif %}{% if form.end_date.value %}&end_date={{ form.end_date.value }}{% endif %}{% if form.search_duty_instructor.value %}&search_duty_instructor={{ form.search_duty_instructor.value }}{% endif %}{% if form.search_instructor.value %}&search_instructor={{ form.search_instructor.value }}{% endif %}{% if form.search_aei.value %}&search_aei={{ form.search_aei.value }}{% endif %}{% if form.search_duty_pilot.value %}&search_duty_pilot={{ form.search_duty_pilot.value }}{% endif %}{% if form.search_tug.value %}&search_tug={{ form.search_tug.value }}{% endif %}&resultsperpage={{ form.resultsperpage.value }}">previous</a>
+        		{% endif %}
+
+        		<span class="current">
+            			Page {{ flightsheetheaders.number }} of {{ flightsheetheaders.paginator.num_pages }}.
+       			</span>
+
+        		{% if flightsheetheaders.has_next %}
+            			<a href="?page={{ flightsheetheaders.next_page_number }}{% if form.start_date.value %}&start_date={{ form.start_date.value }}{% endif %}{% if form.end_date.value %}&end_date={{ form.end_date.value }}{% endif %}{% if form.search_duty_instructor.value %}&search_duty_instructor={{ form.search_duty_instructor.value }}{% endif %}{% if form.search_instructor.value %}&search_instructor={{ form.search_instructor.value }}{% endif %}{% if form.search_aei.value %}&search_aei={{ form.search_aei.value }}{% endif %}{% if form.search_duty_pilot.value %}&search_duty_pilot={{ form.search_duty_pilot.value }}{% endif %}{% if form.search_tug.value %}&search_tug={{ form.search_tug.value }}{% endif %}&resultsperpage={{ form.resultsperpage.value }}">next</a>
+            			<a href="?page={{ flightsheetheaders.paginator.num_pages }}{% if form.start_date.value %}&start_date={{ form.start_date.value }}{% endif %}{% if form.end_date.value %}&end_date={{ form.end_date.value }}{% endif %}{% if form.search_duty_instructor.value %}&search_duty_instructor={{ form.search_duty_instructor.value }}{% endif %}{% if form.search_instructor.value %}&search_instructor={{ form.search_instructor.value }}{% endif %}{% if form.search_aei.value %}&search_aei={{ form.search_aei.value }}{% endif %}{% if form.search_duty_pilot.value %}&search_duty_pilot={{ form.search_duty_pilot.value }}{% endif %}{% if form.search_tug.value %}&search_tug={{ form.search_tug.value }}{% endif %}&resultsperpage={{ form.resultsperpage.value }}">last &raquo;</a>
+			{% endif %}
+    		</span>
+	</div>
+{% endblock %}

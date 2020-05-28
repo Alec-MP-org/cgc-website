@@ -1,0 +1,87 @@
+{% extends "base_template.html" %}
+{% load crispy_forms_tags %}
+{% block flightsearchactive %} active {% endblock %}
+{% block extrahead %}{{ form.media }}{% endblock %}
+{% block content %}
+	<form action="" method="get" id="searchform>
+		{% csrf_token %}
+		<div class="row">
+			<div class="col">
+				{{ form.start_date|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.end_date|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.search_glider|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.search_pilot|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.search_billing_code|as_crispy_field }}
+			</div>
+			<div class="col">
+				<div id="vertbtncontainer">
+					<input id="formsubmitbtn" type="submit" class="btn btn-secondary" value="Search">
+				</div>
+			</div>
+		</div>
+		<p> {{ resultcount }} matches, displaying {{ form.resultsperpage }} results per page </p>
+	</form>
+	<table class="table table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Date</th>
+				<th scope="col">Flight No.</th>
+				<th scope="col">Glider</th>
+				<th scope="col">Pilot 1</th>
+				<th scope="col">Pilot 2</th>
+				<th scope="col">Billing Code</th>
+				<th scope="col">Launch Time</th>
+				<th scope="col">Duration</th>
+				<th scope="col">Tow Cost</th>
+				<th scope="col">Glider Cost</th>
+				<th scope="col">Pilot 1 Cost</th>
+				<th scope="col">Pilot 2 Cost</th>
+				<th scope="col">CGC Cost</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for flight in flights %}
+				<tr>
+					<td>{{ flight.flight_date }}</td>
+					<td>{{ flight.flight_number }}</td>
+					<td>{{ flight.glider }}</td>
+					<td>{{ flight.pilot1 }}</td>
+					<td>{{ flight.pilot2 }}</td>
+					<td>{{ flight.billing_code }}</td>
+					<td>{{ flight.launch_time }}</td>
+					<td>{{ flight.duration_time|time:"H:i" }}</td>
+					<td>{{ flight.tow_cost }}</td>
+					<td>{{ flight.glider_cost }}</td>
+					<td>{{ flight.pilot1_cost }}</td>
+					<td>{{ flight.pilot2_cost }}</td>
+					<td>{{ flight.cgc_cost }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="pagination">
+    		<span class="step-links">
+        		{% if flights.has_previous %}
+            			<a href="?page=1{% if form.start_date.value %}&start_date={{ form.start_date.value }}{% endif %}{% if form.end_date.value %}&end_date={{ form.end_date.value }}{% endif %}{% if form.search_glider.value %}&search_glider={{ form.search_glider.value }}{% endif %}{% if form.search_pilot.value %}&search_pilot={{ form.search_pilot.value }}{% endif %}{% if form.search_billing_code.value %}&search_billing_code={{ form.search_billing_code.value }}{% endif %}&resultsperpage={{ form.resultsperpage.value }}">&laquo; first</a>
+            			<a href="?page={{ flights.previous_page_number }}{% if form.start_date.value %}&start_date={{ form.start_date.value }}{% endif %}{% if form.end_date.value %}&end_date={{ form.end_date.value }}{% endif %}{% if form.search_glider.value %}&search_glider={{ form.search_glider.value }}{% endif %}{% if form.search_pilot.value %}&search_pilot={{ form.search_pilot.value }}{% endif %}{% if form.search_billing_code.value %}&search_billing_code={{ form.search_billing_code.value }}{% endif %}&resultsperpage={{ form.resultsperpage.value }}">previous</a>
+        		{% endif %}
+
+        		<span class="current">
+            			Page {{ flights.number }} of {{ flights.paginator.num_pages }}.
+       			</span>
+
+        		{% if flights.has_next %}
+            			<a href="?page={{ flights.next_page_number }}{% if form.start_date.value %}&start_date={{ form.start_date.value }}{% endif %}{% if form.end_date.value %}&end_date={{ form.end_date.value }}{% endif %}{% if form.search_glider.value %}&search_glider={{ form.search_glider.value }}{% endif %}{% if form.search_pilot.value %}&search_pilot={{ form.search_pilot.value }}{% endif %}{% if form.search_billing_code.value %}&search_billing_code={{ form.search_billing_code.value }}{% endif %}&resultsperpage={{ form.resultsperpage.value }}">next</a>
+            			<a href="?page={{ flights.paginator.num_pages }}{% if form.start_date.value %}&start_date={{ form.start_date.value }}{% endif %}{% if form.end_date.value %}&end_date={{ form.end_date.value }}{% endif %}{% if form.search_glider.value %}&search_glider={{ form.search_glider.value }}{% endif %}{% if form.search_pilot.value %}&search_pilot={{ form.search_pilot.value }}{% endif %}{% if form.search_billing_code.value %}&search_billing_code={{ form.search_billing_code.value }}{% endif %}&resultsperpage={{ form.resultsperpage.value }}">last &raquo;</a>
+        		{% endif %}
+    		</span>
+	</div>
+{% endblock %}

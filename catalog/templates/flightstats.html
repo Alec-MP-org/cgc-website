@@ -1,0 +1,42 @@
+{% extends "base_template.html" %}
+{% load crispy_forms_tags %}
+{% block flightstatsactive %} active {% endblock %}
+{% block extrahead %}{{ form.media }}{% endblock %}
+{% block content %}
+	<form action="" method="get" id="searchform">
+		{% csrf_token %}
+		<div class="row">
+			<div class="col">
+				{{ form.start_date|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.end_date|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.pilot|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.billing_code|as_crispy_field }}
+			</div>
+			<div class="col">
+				{{ form.display_type|as_crispy_field }}
+			</div>
+			<div class="col">
+				<div id="vertbtncontainer">
+					<input id="formsubmitbtn" type="submit" class="btn btn-secondary" value="Filter">
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="chart_container" id="container" data-url="{% url 'flightdata' %}{% if form.display_type.value %}?p={{ form.pilot.value }}&b={{ form.billing_code.value }}&t={{ form.display_type.value }}&sdate={{ form.start_date.value }}&edate={{ form.end_date.value }}{% endif %}"></div>
+  	<script src="https://code.highcharts.com/highcharts.src.js"></script>
+  	<script>
+    		$.ajax({
+      			url: $("#container").attr("data-url"),
+      			dataType: 'json',
+      			success: function (data) {
+        			Highcharts.chart("container", data);
+  			}
+    		});
+  	</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Caboolture Gliding Club</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CDN -Possibly redundant -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  
+  <!-- JQuery -Possibly redundant -->
+  <script src="//code.jquery.com/jquery.min.js"></script>
+
+  <!-- D3 Graphing CDN: -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% block extrahead %}{% endblock %}
+</head>
+{% block navbar%}
+<div id="navbarcontainer">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Caboolture Gliding Club</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item {% block rostersearchactive %}{% endblock %}">
+          <a class="nav-link" href="{% url 'flightsheetsearch' %}">Roster Search</a>
+        </li>
+        <li class="nav-item {% block flightsearchactive %}{% endblock %}">
+          <a class="nav-link" href="{% url 'flightsearch' %}">Flight Search</a>
+        </li>
+	<li class="nav-item {% block flightstatsactive %}{% endblock %}">
+	  <a class="nav-link" href="{% url 'flightstats' %}">Flight Statistics</a>
+	</li>
+      </ul>
+    </div>
+  </nav>
+</div>
+{% endblock %}
+<body>
+  <div class="container-fluid" id="content_container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
